@@ -68,5 +68,157 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
-const readlineSync = require('readline-sync');
+const readlineSync = require("readline-sync");
+
+function readMatrix(rows, columns) {
+    const matrix = [];
+
+    for (let i = 0; i < rows; i++) {
+        const row = readlineSync
+            .question(`Enter row ${i + 1}: `)
+            .trim()
+            .split(/\s+/)
+            .map(Number);
+
+        if (row.length !== columns || row.some(Number.isNaN)) {
+            console.log(`Error: Enter exactly ${columns} numbers.`);
+            i--;
+        } else {
+            matrix.push(row);
+        }
+    }
+
+    return matrix;
+}
+
+function displayMatrix(matrix) {
+    for (let i = 0; i < matrix.length; i++) {
+        console.log(matrix[i].join(" "));
+    }
+}
+
+function transposeMatrix(matrix) {
+    const rows = matrix.length;
+    const columns = matrix[0].length;
+    const transposed = [];
+
+    for (let j = 0; j < columns; j++) {
+        transposed[j] = [];
+
+        for (let i = 0; i < rows; i++) {
+            transposed[j][i] = matrix[i][j];
+        }
+    }
+
+    return transposed;
+}
+
+function addMatrices(matrixA, matrixB) {
+    const result = [];
+
+    for (let i = 0; i < matrixA.length; i++) {
+        result[i] = [];
+
+        for (let j = 0; j < matrixA[i].length; j++) {
+            result[i][j] = matrixA[i][j] + matrixB[i][j];
+        }
+    }
+
+    return result;
+}
+
+function multiplyMatrices(matrixA, matrixB) {
+    const rowsA = matrixA.length;
+    const columnsA = matrixA[0].length;
+    const columnsB = matrixB[0].length;
+    const result = [];
+
+    for (let i = 0; i < rowsA; i++) {
+        result[i] = [];
+
+        for (let j = 0; j < columnsB; j++) {
+            result[i][j] = 0;
+
+            for (let k = 0; k < columnsA; k++) {
+                result[i][j] += matrixA[i][k] * matrixB[k][j];
+            }
+        }
+    }
+
+    return result;
+}
+
+function main() {
+    // PART A: Transpose a matrix
+    console.log("PART A - Transpose a Matrix");
+
+    const transposeRows =
+        readlineSync.questionInt("Enter number of rows: ");
+    const transposeColumns =
+        readlineSync.questionInt("Enter number of columns: ");
+
+    const matrix = readMatrix(transposeRows, transposeColumns);
+    const transposed = transposeMatrix(matrix);
+
+    console.log("\nOriginal Matrix:");
+    displayMatrix(matrix);
+
+    console.log("\nTransposed Matrix:");
+    displayMatrix(transposed);
+
+    // PART B: Add two matrices
+    console.log("\nPART B - Add Two Matrices");
+
+    const addRows =
+        readlineSync.questionInt("Enter number of rows: ");
+    const addColumns =
+        readlineSync.questionInt("Enter number of columns: ");
+
+    console.log("Enter Matrix A:");
+    const matrixA = readMatrix(addRows, addColumns);
+
+    console.log("Enter Matrix B:");
+    const matrixB = readMatrix(addRows, addColumns);
+
+    const sum = addMatrices(matrixA, matrixB);
+
+    console.log("\nSum Matrix:");
+    displayMatrix(sum);
+
+    // PART C: Multiply two matrices
+    console.log("\nPART C - Multiply Two Matrices");
+
+    const rowsA =
+        readlineSync.questionInt("Enter number of rows in Matrix A: ");
+    const columnsA =
+        readlineSync.questionInt("Enter number of columns in Matrix A: ");
+
+    const rowsB =
+        readlineSync.questionInt("Enter number of rows in Matrix B: ");
+    const columnsB =
+        readlineSync.questionInt("Enter number of columns in Matrix B: ");
+
+    if (columnsA !== rowsB) {
+        console.log(
+            "Error: Number of columns in Matrix A must equal number of rows in Matrix B."
+        );
+        return;
+    }
+
+    console.log("Enter Matrix A:");
+    const multiplicationA = readMatrix(rowsA, columnsA);
+
+    console.log("Enter Matrix B:");
+    const multiplicationB = readMatrix(rowsB, columnsB);
+
+    const product = multiplyMatrices(multiplicationA, multiplicationB);
+
+    console.log("\nProduct Matrix:");
+    displayMatrix(product);
+}
+
+main();
+
+
+
 
